@@ -22,7 +22,11 @@
             android:layout_height="wrap_content"
             android:text="Disposable" />
 
-
+        <Button
+            android:id="@+id/btnRx02Composite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Composite Disposable" />
     </LinearLayout>
 
 </ScrollView>
