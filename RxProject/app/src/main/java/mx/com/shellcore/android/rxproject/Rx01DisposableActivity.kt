@@ -9,17 +9,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class Rx00IntroActivity : AppCompatActivity() {
+class Rx01DisposableActivity : AppCompatActivity() {
+
+    private lateinit var disposable: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_rx00_intro)
+        setContentView(R.layout.activity_rx01_disposable)
 
         val numbersObservable: Observable<String> =
             Observable.just("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
 
         val observer: Observer<String> = object : Observer<String> {
             override fun onComplete() {
+                Log.d("onDestroy", "isDisposed? ${disposable.isDisposed}")
                 Log.d(
                     "onComplete",
                     "Hilo ${Thread.currentThread().name} : Se han emitido todos los datos"
@@ -27,10 +30,12 @@ class Rx00IntroActivity : AppCompatActivity() {
             }
 
             override fun onSubscribe(d: Disposable) {
+                disposable = d
                 Log.d("onSubscribe", "Hilo ${Thread.currentThread().name}")
             }
 
             override fun onNext(numero: String) {
+                Log.d("onDestroy", "isDisposed? ${disposable.isDisposed}")
                 Log.d("onNext", "Hilo ${Thread.currentThread().name} : Número: $numero")
             }
 
@@ -47,5 +52,13 @@ class Rx00IntroActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread()) // Donde queremos que se ejecute el observer (Hilo Main)
 //            .observeOn(Schedulers.io()) // Donde queremos que se ejecute el observer (Hilo RxCachedThreadScheduler-2)
             .subscribe(observer)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("onDestroy", "isDisposed? ${disposable.isDisposed}")
+        disposable.dispose()
+        Log.d("onDestroy", "isDisposed? ${disposable.isDisposed}")
+        Log.d("onDestroy", "Desechamos la subscripción")
     }
 }

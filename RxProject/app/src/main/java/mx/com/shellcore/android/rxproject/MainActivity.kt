@@ -18,5 +18,9 @@ class MainActivity : AppCompatActivity() {
         btnRx00Intro.setOnClickListener {
             startActivity(Intent(this, Rx00IntroActivity::class.java))
         }
+        btnRx01Disposable.setOnClickListener {
+            startActivity(Intent(this, Rx01DisposableActivity::class.java))
+        }
+
     }
 }

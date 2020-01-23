@@ -15,6 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Introducción" />
+
+        <Button
+            android:id="@+id/btnRx01Disposable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disposable" />
+
+
     </LinearLayout>
 
 </ScrollView>
