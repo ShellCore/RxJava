@@ -20,7 +20,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         setContentView(R.layout.activity_rx03_operadores)
 
 //        probarJust()
-        probarJustArray()
+//        probarJustArray()
+        probarFromArray()
     }
 
     private fun probarJust() {
@@ -62,6 +63,30 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
                 override fun onNext(t: Array<String>) {
                     showLog("JustArray -> onNext (${t.size})")
+                }
+
+                override fun onError(e: Throwable) {
+                }
+
+            })
+    }
+
+    private fun probarFromArray() {
+        showLog("----------------FROM ARRAY------------------")
+        val numbers =
+            arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        Observable.fromArray(*numbers) // Así se marca para que Kotlin reconozca la variable numbers como String[], y pueda usarse fromArray
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<String> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(t: String) {
+                    showLog("Just -> onNext(${t})")
                 }
 
                 override fun onError(e: Throwable) {
