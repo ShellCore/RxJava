@@ -19,7 +19,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rx03_operadores)
 
-        probarJust()
+//        probarJust()
+        probarJustArray()
     }
 
     private fun probarJust() {
@@ -43,6 +44,29 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 override fun onError(e: Throwable) {
 
                 }
+            })
+    }
+
+    private fun probarJustArray() {
+        showLog("----------------JUST ARRAY------------------")
+        val numbers = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        Observable.just(numbers)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Array<String>> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(t: Array<String>) {
+                    showLog("JustArray -> onNext (${t.size})")
+                }
+
+                override fun onError(e: Throwable) {
+                }
+
             })
     }
 
