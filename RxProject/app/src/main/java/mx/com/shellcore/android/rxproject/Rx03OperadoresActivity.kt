@@ -21,7 +21,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
 //        probarJust()
 //        probarJustArray()
-        probarFromArray()
+//        probarFromArray()
+        probarRange()
     }
 
     private fun probarJust() {
@@ -79,14 +80,36 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<String> {
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onComplete() {
+                }
+
+                override fun onNext(t: String) {
+                    showLog("FromArray -> onNext(${t})")
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
+    }
+
+    private fun probarRange() {
+        showLog("----------------FROM RANGE------------------")
+
+        Observable.range(7, 17) // Así se marca para que Kotlin reconozca la variable numbers como String[], y pueda usarse fromArray
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Int> {
                 override fun onComplete() {
                 }
 
                 override fun onSubscribe(d: Disposable) {
                 }
 
-                override fun onNext(t: String) {
-                    showLog("Just -> onNext(${t})")
+                override fun onNext(integer: Int) {
+                    showLog("Range -> $integer")
                 }
 
                 override fun onError(e: Throwable) {
