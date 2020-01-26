@@ -30,7 +30,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarRepeat()
 //        probarCreate()
 //        probarInterval()
-        probarCreateException()
+//        probarCreateException()
+        probarLargaDuracion()
     }
 
     private fun probarJust() {
@@ -235,6 +236,45 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    private fun probarLargaDuracion() {
+        showLog("----------------CREATE EXCEPTION------------------")
+        Observable.create<String> {
+            try {
+                showLog("Subscribe. Hilo ${Thread.currentThread().name}")
+                it.onNext(tareaLargaDuracion())
+            } catch (e: Exception) {
+                it.onError(e)
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<String> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(t: String) {
+                    showLog("Subscribe. Hilo ${Thread.currentThread().name}")
+                    showLog("onNext: $t")
+                }
+
+                override fun onError(e: Throwable) {
+                    showLog("OnError: ${e.localizedMessage}")
+                }
+
+            })
+
+
+        tareaLargaDuracion()
+    }
+
+    private fun tareaLargaDuracion() : String {
+        Thread.sleep(20000L)
+        return "Terminado"
     }
 
     private fun showLog(message: String) {
