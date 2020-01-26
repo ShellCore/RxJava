@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 class Rx03OperadoresActivity : AppCompatActivity() {
 
@@ -26,7 +27,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarFromArray()
 //        probarRange()
 //        probarRepeat()
-        probarCreate()
+//        probarCreate()
+        probarInterval()
     }
 
     private fun probarJust() {
@@ -171,6 +173,30 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
                 override fun onNext(s: String) {
                     showLog("onNext: $s. Hilo: ${Thread.currentThread().name}")
+                }
+
+                override fun onError(e: Throwable) {
+                }
+
+            })
+    }
+
+    private fun probarInterval() {
+        showLog("----------------INTERVAL------------------")
+
+        Observable.interval(1, TimeUnit.SECONDS)
+            .take(10)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Long> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(s: Long) {
+                    showLog("Interval: $s")
                 }
 
                 override fun onError(e: Throwable) {
