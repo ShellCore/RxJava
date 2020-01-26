@@ -9,6 +9,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
+import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -34,7 +35,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarLargaDuracionLamda()
 //        probarbuffer()
 //        probarMap()
-        probarFlatMap()
+//        probarFlatMap()
+        probarGroupBy()
     }
 
     private fun probarJust() {
@@ -326,7 +328,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarFlatMap() {
         showLog("---------------FLATMAP----------------")
-        val observable = Observable.just("item2")
+        val observable = Observable.just("item2", "item3")
             .flatMap {
                 showLog("Inside the FlatMap $it")
                 Observable.just("$it 1", "$it 2", "$it 3")
@@ -334,6 +336,25 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("Result: $it")
             }
+
+    }
+
+    private fun probarGroupBy() {
+        showLog("----------------GROUPBY-------------------")
+
+        val numberObservable: Observable<Int> = Observable.just(1, 2, 3,4, 5, 6, 7, 8, 9)
+        val groupObservable: Observable<GroupedObservable<String, Int>> = numberObservable.groupBy {
+            if (it%2 == 0) "PAR" else "IMPAR"
+        }
+        val disposable = groupObservable.subscribe { stringIntGroupedObservable ->
+            stringIntGroupedObservable.subscribe {
+                if (stringIntGroupedObservable.key == "PAR") {
+                    showLog("PAR: $it")
+                } else {
+                    showLog("IMPAR: $it")
+                }
+            }
+        }
 
     }
 
