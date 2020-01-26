@@ -3,6 +3,9 @@ package mx.com.shellcore.android.rxproject
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.rxbinding3.widget.TextViewTextChangeEvent
+import com.jakewharton.rxbinding3.widget.textChangeEvents
+import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
@@ -11,6 +14,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_rx03_operadores.*
 import java.util.concurrent.TimeUnit
 
 class Rx03OperadoresActivity : AppCompatActivity() {
@@ -38,7 +42,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarFlatMap()
 //        probarGroupBy()
 //        probarScan()
-        probarWindow()
+//        probarWindow()
+        probarDebounce()
     }
 
     private fun probarJust() {
@@ -381,6 +386,18 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 windowObservable.subscribe {
                     showLog("Item: $it")
                 }
+            }
+    }
+
+    private fun probarDebounce() {
+        showLog("--------------------DEBOUNCE-----------------")
+
+        val disposable = tilName.editText!!.textChanges()
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .map { it.toString() }
+            .subscribe {
+                showLog("onNext: String de búsqueda: $it")
+                txtQuery.setText("Query: $it")
             }
     }
 
