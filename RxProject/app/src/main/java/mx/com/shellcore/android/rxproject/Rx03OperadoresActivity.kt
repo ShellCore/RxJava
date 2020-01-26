@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,7 +29,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarRange()
 //        probarRepeat()
 //        probarCreate()
-        probarInterval()
+//        probarInterval()
+        probarCreateException()
     }
 
     private fun probarJust() {
@@ -200,6 +202,36 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable) {
+                }
+
+            })
+    }
+
+    private fun probarCreateException() {
+        showLog("----------------CREATE EXCEPTION------------------")
+
+        Observable.create<Int> {
+            try {
+                it.onNext(15/3)
+                it.onNext(3/0)
+            } catch (e: Exception) {
+                it.onError(e)
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Int> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(t: Int) {
+                    showLog("onNext: $t")
+                }
+
+                override fun onError(e: Throwable) {
+                    showLog("onError: ${e.localizedMessage}")
                 }
 
             })
