@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 
 class Rx03OperadoresActivity : AppCompatActivity() {
 
@@ -23,7 +25,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarJustArray()
 //        probarFromArray()
 //        probarRange()
-        probarRepeat()
+//        probarRepeat()
+        probarCreate()
     }
 
     private fun probarJust() {
@@ -135,6 +138,39 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
                 override fun onNext(integer: Int) {
                     showLog("Repeat -> $integer")
+                }
+
+                override fun onError(e: Throwable) {
+                }
+
+            })
+    }
+
+    private fun probarCreate() {
+        showLog("----------------CREATE------------------")
+
+        Observable.create(ObservableOnSubscribe<String> {
+            try {
+                showLog("Subscribe. Hilo ${Thread.currentThread().name}")
+                it.onNext("A")
+                it.onNext("E")
+                it.onNext("I")
+                it.onNext("O")
+                it.onNext("U")
+            } catch (e: Exception) {
+                    it.onError(e)
+            }
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<String> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(s: String) {
+                    showLog("onNext: $s. Hilo: ${Thread.currentThread().name}")
                 }
 
                 override fun onError(e: Throwable) {
