@@ -36,7 +36,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarbuffer()
 //        probarMap()
 //        probarFlatMap()
-        probarGroupBy()
+//        probarGroupBy()
+        probarScan()
     }
 
     private fun probarJust() {
@@ -356,6 +357,18 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun probarScan() {
+        showLog("-------------------SCAN------------------")
+
+        Observable.just(1,2,3,4,5,6,7)
+            .scan { t1: Int, t2: Int ->
+                t1 + t2
+            }
+            .subscribe {
+                showLog("onNext: $it")
+            }
     }
 
     private fun tareaLargaDuracion() : String {
