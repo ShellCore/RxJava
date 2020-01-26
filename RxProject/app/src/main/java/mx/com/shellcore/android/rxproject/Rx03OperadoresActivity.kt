@@ -8,6 +8,7 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -31,7 +32,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarCreateException()
 //        probarLargaDuracion()
 //        probarLargaDuracionLamda()
-        probarbuffer()
+//        probarbuffer()
+        probarMap()
     }
 
     private fun probarJust() {
@@ -281,8 +283,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({s ->
-                    showLog("Subscribe. Hilo ${Thread.currentThread().name}")
-                    showLog("onNext: $s")
+                showLog("Subscribe. Hilo ${Thread.currentThread().name}")
+                showLog("onNext: $s")
             },{
                 showLog("OnError: ${it.localizedMessage}")
             })
@@ -299,6 +301,25 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 it.iterator().forEach {item ->
                     showLog("Buffer item: $item")
                 }
+            }
+    }
+
+    private fun probarMap() {
+        showLog("-------------MAP---------------")
+        val empleados = Empleado.getListaEmpleados()
+
+        val observable = Observable.fromArray(empleados)
+            .map {
+                val nombres = ArrayList<String>()
+                for (empleado in it) {
+                    nombres.add(empleado.nombre)
+                }
+                nombres
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                showLog("MapItems: $it")
             }
     }
 
