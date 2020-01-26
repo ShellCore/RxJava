@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class Rx03OperadoresActivity : AppCompatActivity() {
@@ -31,7 +29,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarCreate()
 //        probarInterval()
 //        probarCreateException()
-        probarLargaDuracion()
+//        probarLargaDuracion()
+        probarLargaDuracionLamda()
     }
 
     private fun probarJust() {
@@ -265,11 +264,27 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 override fun onError(e: Throwable) {
                     showLog("OnError: ${e.localizedMessage}")
                 }
-
             })
+    }
 
-
-        tareaLargaDuracion()
+    private fun probarLargaDuracionLamda() {
+        showLog("----------------CREATE EXCEPTION------------------")
+        val disposable = Observable.create<String> {
+            try {
+                showLog("Subscribe. Hilo ${Thread.currentThread().name}")
+                it.onNext(tareaLargaDuracion())
+            } catch (e: Exception) {
+                it.onError(e)
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({s ->
+                    showLog("Subscribe. Hilo ${Thread.currentThread().name}")
+                    showLog("onNext: $s")
+            },{
+                showLog("OnError: ${it.localizedMessage}")
+            })
     }
 
     private fun tareaLargaDuracion() : String {
