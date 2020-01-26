@@ -37,7 +37,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarMap()
 //        probarFlatMap()
 //        probarGroupBy()
-        probarScan()
+//        probarScan()
+        probarWindow()
     }
 
     private fun probarJust() {
@@ -362,12 +363,24 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     private fun probarScan() {
         showLog("-------------------SCAN------------------")
 
-        Observable.just(1,2,3,4,5,6,7)
+        val disposable = Observable.just(1,2,3,4,5,6,7)
             .scan { t1: Int, t2: Int ->
                 t1 + t2
             }
             .subscribe {
                 showLog("onNext: $it")
+            }
+    }
+
+    private fun probarWindow() {
+        showLog("--------------------------WINDOW----------------------")
+        val observable = Observable.range(1, 150)
+            .window(3)
+            .subscribe {windowObservable ->
+                showLog("Siguiente ventana")
+                windowObservable.subscribe {
+                    showLog("Item: $it")
+                }
             }
     }
 
