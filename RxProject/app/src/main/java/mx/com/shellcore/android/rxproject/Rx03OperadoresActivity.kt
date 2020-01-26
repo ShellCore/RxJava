@@ -33,7 +33,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarLargaDuracion()
 //        probarLargaDuracionLamda()
 //        probarbuffer()
-        probarMap()
+//        probarMap()
+        probarFlatMap()
     }
 
     private fun probarJust() {
@@ -321,6 +322,19 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("MapItems: $it")
             }
+    }
+
+    private fun probarFlatMap() {
+        showLog("---------------FLATMAP----------------")
+        val observable = Observable.just("item2")
+            .flatMap {
+                showLog("Inside the FlatMap $it")
+                Observable.just("$it 1", "$it 2", "$it 3")
+            }
+            .subscribe {
+                showLog("Result: $it")
+            }
+
     }
 
     private fun tareaLargaDuracion() : String {
