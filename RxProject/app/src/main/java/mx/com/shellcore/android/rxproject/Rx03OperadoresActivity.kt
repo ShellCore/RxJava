@@ -30,7 +30,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarInterval()
 //        probarCreateException()
 //        probarLargaDuracion()
-        probarLargaDuracionLamda()
+//        probarLargaDuracionLamda()
+        probarbuffer()
     }
 
     private fun probarJust() {
@@ -285,6 +286,20 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             },{
                 showLog("OnError: ${it.localizedMessage}")
             })
+    }
+
+    private fun probarbuffer() {
+        showLog("----------------BUFFER------------------")
+        val  integerObservable = Observable.just(1,2,3,4,5,6,7,8,9,10)
+        val disposable = integerObservable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .buffer(3)
+            .subscribe {
+                showLog("Buffer onNext")
+                it.iterator().forEach {item ->
+                    showLog("Buffer item: $item")
+                }
+            }
     }
 
     private fun tareaLargaDuracion() : String {
