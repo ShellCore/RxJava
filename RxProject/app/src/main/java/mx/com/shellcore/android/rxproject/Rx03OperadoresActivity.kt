@@ -45,7 +45,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarDistinct()
 //        probarElementAt()
 //        probarFilter()
-        probarFirst()
+//        probarFirst()
+        probarIgnoreElements()
     }
 
     private fun probarJust() {
@@ -177,7 +178,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 it.onNext("O")
                 it.onNext("U")
             } catch (e: Exception) {
-                    it.onError(e)
+                it.onError(e)
             }
         }).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -227,8 +228,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
         Observable.create<Int> {
             try {
-                it.onNext(15/3)
-                it.onNext(3/0)
+                it.onNext(15 / 3)
+                it.onNext(3 / 0)
             } catch (e: Exception) {
                 it.onError(e)
             }
@@ -294,23 +295,23 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({s ->
+            .subscribe({ s ->
                 showLog("Subscribe. Hilo ${Thread.currentThread().name}")
                 showLog("onNext: $s")
-            },{
+            }, {
                 showLog("OnError: ${it.localizedMessage}")
             })
     }
 
     private fun probarbuffer() {
         showLog("----------------BUFFER------------------")
-        val  integerObservable = Observable.just(1,2,3,4,5,6,7,8,9,10)
+        val integerObservable = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val disposable = integerObservable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .buffer(3)
             .subscribe {
                 showLog("Buffer onNext")
-                it.iterator().forEach {item ->
+                it.iterator().forEach { item ->
                     showLog("Buffer item: $item")
                 }
             }
@@ -351,9 +352,9 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     private fun probarGroupBy() {
         showLog("----------------GROUPBY-------------------")
 
-        val numberObservable: Observable<Int> = Observable.just(1, 2, 3,4, 5, 6, 7, 8, 9)
+        val numberObservable: Observable<Int> = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
         val groupObservable: Observable<GroupedObservable<String, Int>> = numberObservable.groupBy {
-            if (it%2 == 0) "PAR" else "IMPAR"
+            if (it % 2 == 0) "PAR" else "IMPAR"
         }
         val disposable = groupObservable.subscribe { stringIntGroupedObservable ->
             stringIntGroupedObservable.subscribe {
@@ -370,7 +371,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     private fun probarScan() {
         showLog("-------------------SCAN------------------")
 
-        val disposable = Observable.just(1,2,3,4,5,6,7)
+        val disposable = Observable.just(1, 2, 3, 4, 5, 6, 7)
             .scan { t1: Int, t2: Int ->
                 t1 + t2
             }
@@ -383,7 +384,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         showLog("--------------------------WINDOW----------------------")
         val observable = Observable.range(1, 150)
             .window(3)
-            .subscribe {windowObservable ->
+            .subscribe { windowObservable ->
                 showLog("Siguiente ventana")
                 windowObservable.subscribe {
                     showLog("Item: $it")
@@ -449,7 +450,16 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             })
     }
 
-    private fun tareaLargaDuracion() : String {
+    private fun probarIgnoreElements() {
+        showLog("----------------IGNOREELEMENTS-------------------")
+        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        val disposable = numbers.ignoreElements()
+            .subscribe {
+                showLog("Terminado")
+            }
+    }
+
+    private fun tareaLargaDuracion(): String {
         Thread.sleep(20000L)
         return "Terminado"
     }
