@@ -46,7 +46,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarElementAt()
 //        probarFilter()
 //        probarFirst()
-        probarIgnoreElements()
+//        probarIgnoreElements()
+        probarLast()
     }
 
     private fun probarJust() {
@@ -457,6 +458,23 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("Terminado")
             }
+    }
+
+    private fun probarLast() {
+        showLog("----------------LAST-------------------")
+        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        numbers.last(0)
+            .subscribe(object : SingleObserver<Int> {
+                override fun onSuccess(t: Int) {
+                    showLog("onSuccess: $t")
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
     }
 
     private fun tareaLargaDuracion(): String {
