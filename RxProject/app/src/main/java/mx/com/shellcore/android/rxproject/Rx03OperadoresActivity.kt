@@ -7,6 +7,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.observables.GroupedObservable
@@ -43,7 +44,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarDebounce()
 //        probarDistinct()
 //        probarElementAt()
-        probarFilter()
+//        probarFilter()
+        probarFirst()
     }
 
     private fun probarJust() {
@@ -428,6 +430,23 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }.subscribe {
             showLog("onNext: $it")
         }
+    }
+
+    private fun probarFirst() {
+        showLog("----------------FIRST-------------------")
+        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        numbers.first(0)
+            .subscribe(object : SingleObserver<Int> {
+                override fun onSuccess(t: Int) {
+                    showLog("onSuccess: $t")
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
     }
 
     private fun tareaLargaDuracion() : String {
