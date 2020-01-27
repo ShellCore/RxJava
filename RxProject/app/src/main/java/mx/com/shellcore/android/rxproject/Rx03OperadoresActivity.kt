@@ -41,7 +41,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarScan()
 //        probarWindow()
 //        probarDebounce()
-        probarDistinct()
+//        probarDistinct()
+        probarElementAt()
     }
 
     private fun probarJust() {
@@ -400,13 +401,24 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     }
 
     private fun probarDistinct() {
-        showLog("--------------------Distinct-------------------")
+        showLog("--------------------DISTINCT-------------------")
         val numbers = Observable.just(1, 2, 3, 4, 2, 2, 3, 78, 98, 78)
         val disposable = numbers.distinct()
             .subscribe {
                 showLog("onNext: $it")
             }
     }
+
+    private fun probarElementAt() {
+        showLog("----------------ELEMENTAT-------------------")
+
+        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        val disposable = numbers.elementAt(4)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
 
     private fun tareaLargaDuracion() : String {
         Thread.sleep(20000L)
