@@ -10,6 +10,7 @@ import io.reactivex.Observer
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_rx03_operadores.*
@@ -54,7 +55,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarSkip()
 //        probarSkipLast()
 //        probarTake()
-        probarTakeLast()
+//        probarTakeLast()
+        probarCombineLast()
     }
 
     private fun probarJust() {
@@ -511,6 +513,23 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         showLog("-------------------TAKE LAST-----------------")
         val disposable = numbers
             .takeLast(4)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarCombineLast() {
+        showLog("----------------COMBINE LAST--------------")
+        val numbers = Observable.interval(400, TimeUnit.MILLISECONDS)
+            .take(10)
+        val letters = Observable.interval(100, TimeUnit.MILLISECONDS)
+            .take(50)
+
+        val disposable = Observable
+            .combineLatest<Long, Long, String>(numbers, letters,
+                BiFunction { t1, t2 ->
+                    "$t1:$t2"
+                })
             .subscribe {
                 showLog("onNext: $it")
             }
