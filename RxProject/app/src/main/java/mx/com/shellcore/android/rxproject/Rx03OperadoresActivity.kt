@@ -42,7 +42,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarWindow()
 //        probarDebounce()
 //        probarDistinct()
-        probarElementAt()
+//        probarElementAt()
+        probarFilter()
     }
 
     private fun probarJust() {
@@ -419,6 +420,15 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             }
     }
 
+    private fun probarFilter() {
+        showLog("----------------FILTER-------------------")
+        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        val disposable = numbers.filter {
+            it % 2 == 0
+        }.subscribe {
+            showLog("onNext: $it")
+        }
+    }
 
     private fun tareaLargaDuracion() : String {
         Thread.sleep(20000L)
