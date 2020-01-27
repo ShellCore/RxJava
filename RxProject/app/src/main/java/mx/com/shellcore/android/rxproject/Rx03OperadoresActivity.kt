@@ -21,6 +21,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         const val TAG = "Rx03Operadores"
     }
 
+    private val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rx03_operadores)
@@ -50,15 +52,17 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarLast()
 //        probarSample()
 //        probarSkip()
-        probarSkipLast()
+//        probarSkipLast()
+//        probarTake()
+        probarTakeLast()
     }
 
     private fun probarJust() {
         showLog("-------------------JUST---------------------")
-        Observable.just("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        numbers
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<String> {
+            .subscribe(object : Observer<Int> {
                 override fun onComplete() {
 
                 }
@@ -67,7 +71,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
                 }
 
-                override fun onNext(number: String) {
+                override fun onNext(number: Int) {
                     showLog("Just -> onNext($number)")
                 }
 
@@ -309,8 +313,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarbuffer() {
         showLog("----------------BUFFER------------------")
-        val integerObservable = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-        val disposable = integerObservable.subscribeOn(Schedulers.io())
+        val disposable = numbers.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .buffer(3)
             .subscribe {
@@ -355,9 +358,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarGroupBy() {
         showLog("----------------GROUPBY-------------------")
-
-        val numberObservable: Observable<Int> = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        val groupObservable: Observable<GroupedObservable<String, Int>> = numberObservable.groupBy {
+        val groupObservable: Observable<GroupedObservable<String, Int>> = numbers.groupBy {
             if (it % 2 == 0) "PAR" else "IMPAR"
         }
         val disposable = groupObservable.subscribe { stringIntGroupedObservable ->
@@ -369,13 +370,11 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun probarScan() {
         showLog("-------------------SCAN------------------")
-
-        val disposable = Observable.just(1, 2, 3, 4, 5, 6, 7)
+        val disposable = numbers
             .scan { t1: Int, t2: Int ->
                 t1 + t2
             }
@@ -398,7 +397,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarDebounce() {
         showLog("--------------------DEBOUNCE-----------------")
-
         val disposable = tilName.editText!!.textChanges()
             .debounce(500, TimeUnit.MILLISECONDS)
             .map { it.toString() }
@@ -419,8 +417,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarElementAt() {
         showLog("----------------ELEMENTAT-------------------")
-
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val disposable = numbers.elementAt(4)
             .subscribe {
                 showLog("onNext: $it")
@@ -429,7 +425,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarFilter() {
         showLog("----------------FILTER-------------------")
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val disposable = numbers.filter {
             it % 2 == 0
         }.subscribe {
@@ -439,7 +434,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarFirst() {
         showLog("----------------FIRST-------------------")
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         numbers.first(0)
             .subscribe(object : SingleObserver<Int> {
                 override fun onSuccess(t: Int) {
@@ -456,7 +450,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarIgnoreElements() {
         showLog("----------------IGNOREELEMENTS-------------------")
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val disposable = numbers.ignoreElements()
             .subscribe {
                 showLog("Terminado")
@@ -465,7 +458,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarLast() {
         showLog("----------------LAST-------------------")
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         numbers.last(0)
             .subscribe(object : SingleObserver<Int> {
                 override fun onSuccess(t: Int) {
@@ -482,7 +474,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarSample() {
         showLog("-------------SAMPLE---------------")
-
         val disposable = Observable.interval(500, TimeUnit.MILLISECONDS)
             .take(10)
             .sample(2, TimeUnit.SECONDS)
@@ -493,7 +484,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarSkip() {
         showLog("----------------------SKIP---------------------")
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val disposable = numbers.skip(4)
             .subscribe {
                 showLog("onNext: $it")
@@ -502,8 +492,25 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 
     private fun probarSkipLast() {
         showLog("------------------SKIP LAST------------------")
-        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val disposable = numbers.skipLast(4)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarTake() {
+        showLog("-------------------TAKE-----------------")
+        val disposable = numbers
+            .take(4)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarTakeLast() {
+        showLog("-------------------TAKE LAST-----------------")
+        val disposable = numbers
+            .takeLast(4)
             .subscribe {
                 showLog("onNext: $it")
             }
