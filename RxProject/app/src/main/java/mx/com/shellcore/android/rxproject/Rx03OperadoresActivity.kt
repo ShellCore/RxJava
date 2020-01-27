@@ -63,7 +63,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarZip()
 //        probarRetry()
 //        probarDelay()
-        probarDo()
+//        probarDo()
+        probarObserveOnSubscribeOn()
     }
 
     private fun probarJust() {
@@ -632,7 +633,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     }
 
     private fun probarDo() {
-        showLog("---------------------Delay---------------------")
+        showLog("---------------------DO---------------------")
         val disposable = numbers
             .doOnNext {
                 showLog("doOnNext: $it")
@@ -643,6 +644,18 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             }
             .subscribe {
                 showLog("onNext: $it")
+            }
+    }
+
+    private fun probarObserveOnSubscribeOn() {
+        showLog("-------ObserveOn - SubscribeOn--------")
+        val disposable = Observable.create<String> {
+            showLog("Hilo de ejecución Observable: ${Thread.currentThread().name}")
+            it.onNext("Emitiendo un item")
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                showLog("Hilo de ejecución Observer: ${Thread.currentThread().name}")
             }
     }
 
