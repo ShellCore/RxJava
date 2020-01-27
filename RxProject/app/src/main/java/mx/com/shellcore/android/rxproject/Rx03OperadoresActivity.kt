@@ -3,15 +3,12 @@ package mx.com.shellcore.android.rxproject
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.rxbinding3.widget.TextViewTextChangeEvent
-import com.jakewharton.rxbinding3.widget.textChangeEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_rx03_operadores.*
@@ -43,7 +40,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarGroupBy()
 //        probarScan()
 //        probarWindow()
-        probarDebounce()
+//        probarDebounce()
+        probarDistinct()
     }
 
     private fun probarJust() {
@@ -398,6 +396,15 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("onNext: String de búsqueda: $it")
                 txtQuery.setText("Query: $it")
+            }
+    }
+
+    private fun probarDistinct() {
+        showLog("--------------------Distinct-------------------")
+        val numbers = Observable.just(1, 2, 3, 4, 2, 2, 3, 78, 98, 78)
+        val disposable = numbers.distinct()
+            .subscribe {
+                showLog("onNext: $it")
             }
     }
 
