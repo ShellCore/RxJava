@@ -11,6 +11,7 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_rx03_operadores.*
@@ -56,7 +57,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarSkipLast()
 //        probarTake()
 //        probarTakeLast()
-        probarCombineLast()
+//        probarCombineLast()
+        probarJoin()
     }
 
     private fun probarJust() {
@@ -530,6 +532,29 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 BiFunction { t1, t2 ->
                     "$t1:$t2"
                 })
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarJoin() {
+        showLog("-------------------JOIN------------------")
+        val LEFT_WINDOW_DURATION = 0L
+        val RIGHT_WINDOW_DURATION = 0L
+
+        val leftObservable = Observable.interval(70, TimeUnit.MILLISECONDS).take(10)
+        val rightObservable = Observable.interval(100, TimeUnit.MILLISECONDS).take(10)
+
+        val disposable = leftObservable.join<Long, Long, Long, String>(
+            rightObservable,
+            Function {
+                Observable.timer(LEFT_WINDOW_DURATION, TimeUnit.MILLISECONDS)
+            }, Function {
+                Observable.timer(RIGHT_WINDOW_DURATION, TimeUnit.MILLISECONDS)
+            }, BiFunction { l, r ->
+                showLog("Left: $l, Right: $r")
+                "$l:$r"
+            })
             .subscribe {
                 showLog("onNext: $it")
             }
