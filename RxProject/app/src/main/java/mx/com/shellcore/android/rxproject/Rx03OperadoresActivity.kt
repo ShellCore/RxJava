@@ -47,7 +47,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarFilter()
 //        probarFirst()
 //        probarIgnoreElements()
-        probarLast()
+//        probarLast()
+        probarSample()
     }
 
     private fun probarJust() {
@@ -475,6 +476,17 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 override fun onError(e: Throwable) {
                 }
             })
+    }
+
+    private fun probarSample() {
+        showLog("-------------SAMPLE---------------")
+
+        val disposable = Observable.interval(500, TimeUnit.MILLISECONDS)
+            .take(10)
+            .sample(2, TimeUnit.SECONDS)
+            .subscribe {
+                showLog("onNext: $it")
+            }
     }
 
     private fun tareaLargaDuracion(): String {
