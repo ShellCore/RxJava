@@ -59,7 +59,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTakeLast()
 //        probarCombineLast()
 //        probarJoin()
-        probarMerge()
+//        probarMerge()
+        probarZip()
     }
 
     private fun probarJust() {
@@ -574,6 +575,29 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             }
 
         val disposable = Observable.merge(observable, observable2)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarZip() {
+        showLog("------------------ZIP--------------------")
+        val observable = Observable.interval(1, TimeUnit.SECONDS)
+            .map {
+                "Grupo 1:$it"
+            }
+
+        val observable2 = Observable.interval(1, TimeUnit.SECONDS)
+            .map {
+                "Grupo 2:$it"
+            }
+
+        val disposable = Observable.zip<String, String, String>(
+            observable,
+            observable2,
+            BiFunction { t1, t2 ->
+                "$t1 - $t2"
+            })
             .subscribe {
                 showLog("onNext: $it")
             }
