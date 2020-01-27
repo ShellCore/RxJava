@@ -58,7 +58,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTake()
 //        probarTakeLast()
 //        probarCombineLast()
-        probarJoin()
+//        probarJoin()
+        probarMerge()
     }
 
     private fun probarJust() {
@@ -555,6 +556,24 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 showLog("Left: $l, Right: $r")
                 "$l:$r"
             })
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarMerge() {
+        showLog("-------------------MERGE------------------")
+        val observable = Observable.interval(2, TimeUnit.SECONDS)
+            .map {
+                "Grupo 1 : $it"
+            }
+
+        val observable2 = Observable.interval(1, TimeUnit.SECONDS)
+            .map {
+                "Grupo 2 : $it"
+            }
+
+        val disposable = Observable.merge(observable, observable2)
             .subscribe {
                 showLog("onNext: $it")
             }
