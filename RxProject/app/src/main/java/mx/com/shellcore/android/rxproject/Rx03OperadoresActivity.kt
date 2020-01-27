@@ -60,7 +60,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarCombineLast()
 //        probarJoin()
 //        probarMerge()
-        probarZip()
+//        probarZip()
+        probarRetry()
     }
 
     private fun probarJust() {
@@ -601,6 +602,23 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("onNext: $it")
             }
+    }
+
+    private fun probarRetry() {
+        showLog("---------------------RETRY---------------------")
+        val disposable = Observable.create<String> {
+            it.onNext("Probando RETRY")
+            it.onError(Throwable("Error de prueba"))
+        }.retryWhen {
+            it.retry()
+
+        }.subscribe({
+            showLog("onNext: $it")
+        }, {
+            showLog("onError: $it")
+        }, {
+            showLog("onComplete")
+        })
     }
 
     private fun tareaLargaDuracion(): String {
