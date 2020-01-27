@@ -48,7 +48,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarFirst()
 //        probarIgnoreElements()
 //        probarLast()
-        probarSample()
+//        probarSample()
+        probarSkip()
     }
 
     private fun probarJust() {
@@ -484,6 +485,15 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         val disposable = Observable.interval(500, TimeUnit.MILLISECONDS)
             .take(10)
             .sample(2, TimeUnit.SECONDS)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarSkip() {
+        showLog("----------------------SKIP---------------------")
+        val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        val disposable = numbers.skip(4)
             .subscribe {
                 showLog("onNext: $it")
             }
