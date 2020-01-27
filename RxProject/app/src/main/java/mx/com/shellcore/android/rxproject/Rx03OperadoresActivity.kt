@@ -61,7 +61,9 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarJoin()
 //        probarMerge()
 //        probarZip()
-        probarRetry()
+//        probarRetry()
+//        probarDelay()
+        probarDo()
     }
 
     private fun probarJust() {
@@ -619,6 +621,29 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }, {
             showLog("onComplete")
         })
+    }
+
+    private fun probarDelay() {
+        showLog("---------------------Delay---------------------")
+        val disposable = numbers.delay(5, TimeUnit.SECONDS)
+            .subscribe {
+                showLog("onNext: it")
+            }
+    }
+
+    private fun probarDo() {
+        showLog("---------------------Delay---------------------")
+        val disposable = numbers
+            .doOnNext {
+                showLog("doOnNext: $it")
+            }.doAfterNext {
+                showLog("doAfterNext: $it")
+            }.doOnComplete {
+                showLog("doOnComplete")
+            }
+            .subscribe {
+                showLog("onNext: $it")
+            }
     }
 
     private fun tareaLargaDuracion(): String {
