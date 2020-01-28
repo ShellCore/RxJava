@@ -69,7 +69,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTimeInterval()
 //        probarTimeOut()
 //        probarTimeStamp()
-        probarUsing()
+//        probarUsing()
+        probarAll()
     }
 
     private fun probarJust() {
@@ -746,6 +747,15 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("onNext: $it")
             }
+    }
+
+    private fun probarAll() {
+        showLog("-----------------ALL------------------")
+        val disposable = numbers.all {
+            it < 8
+        }.subscribe { t ->
+            showLog("onSuccess: $t")
+        }
     }
 
     private fun tareaLargaDuracion(): String {
