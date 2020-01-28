@@ -71,7 +71,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTimeStamp()
 //        probarUsing()
 //        probarAll()
-        probarAmb()
+//        probarAmb()
+        probarContains()
     }
 
     private fun probarJust() {
@@ -754,8 +755,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         showLog("-----------------ALL------------------")
         val disposable = numbers.all {
             it < 8
-        }.subscribe { t ->
-            showLog("onSuccess: $t")
+        }.subscribe { isSuccessful ->
+            showLog("onSuccess: $isSuccessful")
         }
     }
 
@@ -769,6 +770,15 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         ).subscribe {
             showLog("onNext: $it")
         }
+    }
+
+    private fun probarContains() {
+        showLog("-----------------CONTAINS------------------")
+        val disposable = numbers
+            .contains(8)
+            .subscribe { isSuccessful ->
+                showLog("onSuccess: $isSuccessful")
+            }
     }
 
     private fun tareaLargaDuracion(): String {
