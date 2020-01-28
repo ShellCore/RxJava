@@ -70,7 +70,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTimeOut()
 //        probarTimeStamp()
 //        probarUsing()
-        probarAll()
+//        probarAll()
+        probarAmb()
     }
 
     private fun probarJust() {
@@ -755,6 +756,18 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             it < 8
         }.subscribe { t ->
             showLog("onSuccess: $t")
+        }
+    }
+
+    private fun probarAmb() {
+        showLog("-----------------AMB------------------")
+        val letters = Observable.just("A", "B", "C", "D", "E", "F")
+
+        val disposable = Observable.ambArray(
+            numbers.delay(1, TimeUnit.SECONDS),
+            letters
+        ).subscribe {
+            showLog("onNext: $it")
         }
     }
 
