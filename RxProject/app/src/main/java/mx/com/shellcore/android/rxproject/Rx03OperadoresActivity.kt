@@ -68,7 +68,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarDo()
 //        probarObserveOnSubscribeOn()
 //        probarTimeInterval()
-        probarTimeOut()
+//        probarTimeOut()
+        probarTimeStamp()
     }
 
     private fun probarJust() {
@@ -714,6 +715,21 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 showLog("onError: ${it.localizedMessage}")
             })
     }
+
+    private fun probarTimeStamp() {
+        showLog("----------------------------------------------")
+        val observable = Observable.create<String> {
+            it.onNext("A")
+            it.onNext("B")
+            it.onNext("C")
+        }
+
+        observable.timestamp()
+            .subscribe {
+                showLog("$it")
+            }
+    }
+
     private fun tareaLargaDuracion(): String {
         Thread.sleep(20000L)
         return "Terminado"
