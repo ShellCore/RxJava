@@ -67,7 +67,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarDelay()
 //        probarDo()
 //        probarObserveOnSubscribeOn()
-        probarTimeInterval()
+//        probarTimeInterval()
+        probarTimeOut()
     }
 
     private fun probarJust() {
@@ -699,9 +700,20 @@ class Rx03OperadoresActivity : AppCompatActivity() {
                 override fun hasComplete(): Boolean {
                     return false
                 }
+
             })
     }
 
+    private fun probarTimeOut() {
+        showLog("-------------------------TIME OUT---------------------------")
+        val disposable = Observable.timer(1, TimeUnit.SECONDS)
+            .timeout(500, TimeUnit.MILLISECONDS)
+            .subscribe({
+                showLog("onNext: $it")
+            }, {
+                showLog("onError: ${it.localizedMessage}")
+            })
+    }
     private fun tareaLargaDuracion(): String {
         Thread.sleep(20000L)
         return "Terminado"
