@@ -73,7 +73,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarAll()
 //        probarAmb()
 //        probarContains()
-        probarDefaultIfEmpty()
+//        probarDefaultIfEmpty()
+        probarSequenceEqual()
     }
 
     private fun probarJust() {
@@ -793,6 +794,16 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }.defaultIfEmpty(0)
             .subscribe {
                 showLog("onNext: $it")
+            }
+    }
+
+    private fun probarSequenceEqual() {
+        showLog("-----------------sequence equal------------------")
+        val numbers2 = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+        val disposable = Observable.sequenceEqual(numbers, numbers2)
+            .subscribe { isSuccess ->
+                showLog("onSuccess: $isSuccess")
             }
     }
 
