@@ -72,7 +72,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarUsing()
 //        probarAll()
 //        probarAmb()
-        probarContains()
+//        probarContains()
+        probarDefaultIfEmpty()
     }
 
     private fun probarJust() {
@@ -778,6 +779,20 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .contains(8)
             .subscribe { isSuccessful ->
                 showLog("onSuccess: $isSuccessful")
+            }
+    }
+
+    private fun probarDefaultIfEmpty() {
+        showLog("-----------------DEFAULT IF EMPTY------------------")
+        val disposable = Observable.create<Int> {
+            val num = 7
+            if (num % 2 == 0) {
+                it.onNext(num)
+            }
+            it.onComplete()
+        }.defaultIfEmpty(0)
+            .subscribe {
+                showLog("onNext: $it")
             }
     }
 
