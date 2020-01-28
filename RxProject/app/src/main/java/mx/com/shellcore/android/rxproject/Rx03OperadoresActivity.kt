@@ -4,19 +4,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.Observer
-import io.reactivex.SingleObserver
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Timed
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.activity_rx03_operadores.*
+import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 
 class Rx03OperadoresActivity : AppCompatActivity() {
@@ -69,7 +68,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarObserveOnSubscribeOn()
 //        probarTimeInterval()
 //        probarTimeOut()
-        probarTimeStamp()
+//        probarTimeStamp()
+        probarUsing()
     }
 
     private fun probarJust() {
@@ -727,6 +727,24 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         observable.timestamp()
             .subscribe {
                 showLog("$it")
+            }
+    }
+
+    private fun probarUsing() {
+        showLog("------------USING-------------")
+        val disposable = Observable.using(
+            Callable<String> { "using" },
+            Function<String, ObservableSource<Char>> { t ->
+                Observable.create {
+                    for (c in t.toCharArray()) {
+                        it.onNext(c)
+                    }
+                    it.onComplete()
+                }
+            }
+            , Consumer<String> { t -> showLog("Disposable $t") })
+            .subscribe {
+                showLog("onNext: $it")
             }
     }
 
