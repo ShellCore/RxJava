@@ -14,6 +14,8 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Timed
+import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.activity_rx03_operadores.*
 import java.util.concurrent.TimeUnit
 
@@ -64,7 +66,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarRetry()
 //        probarDelay()
 //        probarDo()
-        probarObserveOnSubscribeOn()
+//        probarObserveOnSubscribeOn()
+        probarTimeInterval()
     }
 
     private fun probarJust() {
@@ -657,6 +660,46 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("Hilo de ejecución Observer: ${Thread.currentThread().name}")
             }
+    }
+
+    private fun probarTimeInterval() {
+        showLog("------------------------TIME INTERVAL-------------------------")
+        val disposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+            .take(3)
+            .timeInterval()
+            .subscribe(object : Subject<Timed<Long>>() {
+                override fun hasThrowable(): Boolean {
+                    return false
+                }
+
+                override fun hasObservers(): Boolean {
+                    return false
+                }
+
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onError(e: Throwable) {
+                }
+
+                override fun getThrowable(): Throwable? {
+                    return null
+                }
+
+                override fun subscribeActual(observer: Observer<in Timed<Long>>?) {
+                }
+
+                override fun onNext(t: Timed<Long>) {
+                    showLog("onNext: $t")
+                }
+
+                override fun hasComplete(): Boolean {
+                    return false
+                }
+            })
     }
 
     private fun tareaLargaDuracion(): String {
