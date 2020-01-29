@@ -79,7 +79,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarSkipUntil()
 //        probarTakeUntil()
 //        probarTakeWhile()
-        probarAverage()
+//        probarAverage()
+        probarCount()
     }
 
     private fun probarJust() {
@@ -864,12 +865,22 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }
     }
 
+
     private fun probarAverage() {
         showLog("-------------AVERAGE----------------")
         val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
         val disposable = MathObservable.averageDouble(obs)
             .subscribe {
                 showLog("Average: $it")
+            }
+    }
+
+    private fun probarCount() {
+        showLog("-------------AVERAGE----------------")
+        val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
+        val disposable = obs.count()
+            .subscribe { t ->
+                showLog("Count: $t")
             }
     }
 
