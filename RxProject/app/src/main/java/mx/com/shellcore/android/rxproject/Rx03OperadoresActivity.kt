@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
+import hu.akarnokd.rxjava2.math.MathObservable
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -77,7 +78,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarSequenceEqual()
 //        probarSkipUntil()
 //        probarTakeUntil()
-        probarTakeWhile()
+//        probarTakeWhile()
+        probarAverage()
     }
 
     private fun probarJust() {
@@ -860,6 +862,15 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }.subscribe {
             showLog("onNext: $it")
         }
+    }
+
+    private fun probarAverage() {
+        showLog("-------------AVERAGE----------------")
+        val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
+        val disposable = MathObservable.averageDouble(obs)
+            .subscribe {
+                showLog("Average: $it")
+            }
     }
 
     private fun tareaLargaDuracion(): String {
