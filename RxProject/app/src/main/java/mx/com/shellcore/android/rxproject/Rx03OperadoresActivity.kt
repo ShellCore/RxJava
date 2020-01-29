@@ -75,7 +75,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarContains()
 //        probarDefaultIfEmpty()
 //        probarSequenceEqual()
-        probarSkipUntil()
+//        probarSkipUntil()
+        probarTakeUntil()
     }
 
     private fun probarJust() {
@@ -821,6 +822,25 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         val timer = Observable.timer(3, TimeUnit.SECONDS)
 
         val disposable = numbers.skipUntil(timer)
+            .subscribe {
+                showLog("onNext: $it")
+            }
+    }
+
+    private fun probarTakeUntil() {
+        showLog("-------------TAKE UNTIL----------------")
+        val obs1 = Observable.create<Int> {
+            for (i in 0..30) {
+                Thread.sleep(200)
+                it.onNext(i)
+            }
+            it.onComplete()
+        }
+
+        val obs2 = Observable.timer(2, TimeUnit.SECONDS)
+
+
+        val disposable = obs1.takeUntil(obs2)
             .subscribe {
                 showLog("onNext: $it")
             }
