@@ -74,7 +74,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarAmb()
 //        probarContains()
 //        probarDefaultIfEmpty()
-        probarSequenceEqual()
+//        probarSequenceEqual()
+        probarSkipUntil()
     }
 
     private fun probarJust() {
@@ -798,12 +799,30 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     }
 
     private fun probarSequenceEqual() {
-        showLog("-----------------sequence equal------------------")
+        showLog("-----------------SEQUENCE EQUAL------------------")
         val numbers2 = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
         val disposable = Observable.sequenceEqual(numbers, numbers2)
             .subscribe { isSuccess ->
                 showLog("onSuccess: $isSuccess")
+            }
+    }
+
+    private fun probarSkipUntil() {
+        showLog("-----------------SKIP UNTIL------------------")
+        val numbers = Observable.create<Int> {
+            for (i in 0..50) {
+                Thread.sleep(100)
+                it.onNext(i)
+            }
+            it.onComplete()
+        }
+
+        val timer = Observable.timer(3, TimeUnit.SECONDS)
+
+        val disposable = numbers.skipUntil(timer)
+            .subscribe {
+                showLog("onNext: $it")
             }
     }
 
