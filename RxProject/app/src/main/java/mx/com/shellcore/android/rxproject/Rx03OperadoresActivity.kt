@@ -80,7 +80,10 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTakeUntil()
 //        probarTakeWhile()
 //        probarAverage()
-        probarCount()
+//        probarCount()
+        probarMax()
+        probarMin()
+        probarSum()
     }
 
     private fun probarJust() {
@@ -865,10 +868,10 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }
     }
 
+    val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
 
     private fun probarAverage() {
         showLog("-------------AVERAGE----------------")
-        val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
         val disposable = MathObservable.averageDouble(obs)
             .subscribe {
                 showLog("Average: $it")
@@ -876,11 +879,34 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     }
 
     private fun probarCount() {
-        showLog("-------------AVERAGE----------------")
-        val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
+        showLog("-------------COUNT----------------")
         val disposable = obs.count()
             .subscribe { t ->
                 showLog("Count: $t")
+            }
+    }
+
+    private fun probarMax() {
+        showLog("-------------MAX----------------")
+        val disposable = MathObservable.max(obs)
+            .subscribe {
+                showLog("Max: $it")
+            }
+    }
+
+    private fun probarMin() {
+        showLog("-------------MIN----------------")
+        val disposable = MathObservable.min(obs)
+            .subscribe {
+                showLog("Min: $it")
+            }
+    }
+
+    private fun probarSum() {
+        showLog("-------------SUM----------------")
+        val disposable = MathObservable.sumInt(obs)
+            .subscribe { t ->
+                showLog("Sum: $t")
             }
     }
 
