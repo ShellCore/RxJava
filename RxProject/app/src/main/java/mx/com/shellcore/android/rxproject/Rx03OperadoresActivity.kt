@@ -76,7 +76,8 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarDefaultIfEmpty()
 //        probarSequenceEqual()
 //        probarSkipUntil()
-        probarTakeUntil()
+//        probarTakeUntil()
+        probarTakeWhile()
     }
 
     private fun probarJust() {
@@ -844,6 +845,21 @@ class Rx03OperadoresActivity : AppCompatActivity() {
             .subscribe {
                 showLog("onNext: $it")
             }
+    }
+
+    private fun probarTakeWhile() {
+        showLog("-------------TAKE WHILE----------------")
+        val obs1 = Observable.create<Int> {
+            for (i in 0..30) {
+                Thread.sleep(200)
+                it.onNext(i)
+            }
+            it.onComplete()
+        }.takeWhile {
+            it < 12
+        }.subscribe {
+            showLog("onNext: $it")
+        }
     }
 
     private fun tareaLargaDuracion(): String {
