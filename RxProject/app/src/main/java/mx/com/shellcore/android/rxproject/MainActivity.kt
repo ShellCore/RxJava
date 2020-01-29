@@ -11,10 +11,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupOnclicks()
+        setupOnClicks()
     }
 
-    private fun setupOnclicks() {
+    private fun setupOnClicks() {
         btnRx00Intro.setOnClickListener {
             startActivity(Intent(this, Rx00IntroActivity::class.java))
         }
@@ -26,6 +26,9 @@ class MainActivity : AppCompatActivity() {
         }
         btnRx03Operadores.setOnClickListener {
             startActivity(Intent(this, Rx03OperadoresActivity::class.java))
+        }
+        btnRx04TiposOperadores.setOnClickListener {
+            startActivity(Intent(this, Rx04TiposObservablesActivity::class.java))
         }
     }
 }

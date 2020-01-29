@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Rx03OperadoresActivity"></activity>
+        <activity android:name=".Rx04TiposObservablesActivity"></activity>
+        <activity android:name=".Rx03OperadoresActivity" />
         <activity android:name=".Rx02CompositeActivity" />
         <activity android:name=".Rx01DisposableActivity" />
         <activity android:name=".Rx00IntroActivity" />

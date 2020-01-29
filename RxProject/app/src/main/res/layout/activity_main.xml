@@ -34,6 +34,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Operadores" />
+
+        <Button
+            android:id="@+id/btnRx04TiposOperadores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tipos de Obsevables" />
     </LinearLayout>
 
 </ScrollView>
