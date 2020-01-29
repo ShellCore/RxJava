@@ -26,6 +26,7 @@ class Rx03OperadoresActivity : AppCompatActivity() {
     }
 
     private val numbers = Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    private val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +82,10 @@ class Rx03OperadoresActivity : AppCompatActivity() {
 //        probarTakeWhile()
 //        probarAverage()
 //        probarCount()
-        probarMax()
-        probarMin()
-        probarSum()
+//        probarMax()
+//        probarMin()
+//        probarSum()
+        probarReduce()
     }
 
     private fun probarJust() {
@@ -868,8 +870,6 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         }
     }
 
-    val obs = Observable.fromArray(1, 34, 43, 1, 5, 7, 78, 151, 546, 1, 2, 5, 6)
-
     private fun probarAverage() {
         showLog("-------------AVERAGE----------------")
         val disposable = MathObservable.averageDouble(obs)
@@ -907,6 +907,16 @@ class Rx03OperadoresActivity : AppCompatActivity() {
         val disposable = MathObservable.sumInt(obs)
             .subscribe { t ->
                 showLog("Sum: $t")
+            }
+    }
+
+    private fun probarReduce() {
+        showLog("----------------REDUCE-----------------")
+
+        val disposable = Observable.just(2, 2, 2, 2)
+            .reduce { t1, t2 -> t1 * t2 }
+            .subscribe {
+                showLog("Result: $it")
             }
     }
 
