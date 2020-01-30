@@ -1,7 +1,6 @@
 package mx.com.shellcore.android.rxproject
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
@@ -106,12 +105,4 @@ class Rx04ObservableTypesActivity : AppCompatActivity() {
         maybeEmpty.subscribe(maybeObserverEmpty)
 
     }
-}
-
-private fun String.showLog() {
-    Log.d("Rx4ObservableTypes", this)
-}
-
-private fun String.showTitle() {
-    "------------------------------ $this ------------------------------".showLog()
 }

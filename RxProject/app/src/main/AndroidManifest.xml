@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Rx04ObservableTypesActivity"></activity>
-        <activity android:name=".Rx03OperadoresActivity" />
+        <activity android:name=".Rx03OperatorsActivity" />
         <activity android:name=".Rx02CompositeActivity" />
         <activity android:name=".Rx01DisposableActivity" />
         <activity android:name=".Rx00IntroActivity" />
