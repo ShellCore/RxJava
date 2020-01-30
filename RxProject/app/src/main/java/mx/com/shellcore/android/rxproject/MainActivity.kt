@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, Rx03OperadoresActivity::class.java))
         }
         btnRx04TiposOperadores.setOnClickListener {
-            startActivity(Intent(this, Rx04TiposObservablesActivity::class.java))
+            startActivity(Intent(this, Rx04ObservableTypesActivity::class.java))
         }
     }
 }
