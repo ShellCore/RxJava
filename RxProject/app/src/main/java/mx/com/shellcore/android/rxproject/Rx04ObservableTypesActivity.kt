@@ -14,9 +14,10 @@ class Rx04ObservableTypesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rx04_tipos_observables)
 
-        observableObserver()
-        singleSingleObserver()
-        maybeMaybeObserver()
+//        observableObserver()
+//        singleSingleObserver()
+//        maybeMaybeObserver()
+        completableCompletableObserver()
     }
 
     private fun observableObserver() {
@@ -104,5 +105,25 @@ class Rx04ObservableTypesActivity : AppCompatActivity() {
         maybe.subscribe(maybeObserver)
         maybeEmpty.subscribe(maybeObserverEmpty)
 
+    }
+
+    private fun completableCompletableObserver() {
+        "COMPLETABLE - COMPLETABLE_OBSERVER".showTitle()
+
+        val completable = Completable.create {
+            it.onComplete()
+        }
+
+        val completableObserver = object : CompletableObserver {
+            override fun onComplete() {
+                "onComplete".showLog()
+            }
+
+            override fun onSubscribe(d: Disposable) {}
+
+            override fun onError(e: Throwable) {}
+        }
+
+        completable.subscribe(completableObserver)
     }
 }
