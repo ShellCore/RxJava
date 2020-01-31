@@ -17,7 +17,8 @@ class Rx04ObservableTypesActivity : AppCompatActivity() {
 //        observableObserver()
 //        singleSingleObserver()
 //        maybeMaybeObserver()
-        completableCompletableObserver()
+//        completableCompletableObserver()
+        flowableObserver()
     }
 
     private fun observableObserver() {
@@ -125,5 +126,26 @@ class Rx04ObservableTypesActivity : AppCompatActivity() {
         }
 
         completable.subscribe(completableObserver)
+    }
+
+    private fun flowableObserver() {
+        "FLOWABLE - OBSERVER".showTitle()
+
+        val flowable = Flowable.range(1, 10000)
+
+        val singleObserver = object : SingleObserver<Int> {
+            override fun onSuccess(t: Int) {
+                "onSuccess: $t".showLog()
+            }
+
+            override fun onSubscribe(d: Disposable) {}
+
+            override fun onError(e: Throwable) {}
+
+        }
+
+        flowable.reduce(0, { t1, t2 ->
+            t1 + t2
+        }).subscribe(singleObserver)
     }
 }
