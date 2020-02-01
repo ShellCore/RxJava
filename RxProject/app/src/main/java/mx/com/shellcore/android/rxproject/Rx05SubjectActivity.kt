@@ -2,6 +2,7 @@ package mx.com.shellcore.android.rxproject
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.AsyncSubject
@@ -43,7 +44,8 @@ class Rx05SubjectActivity : AppCompatActivity() {
 
 //        probePublishSubject()
 //        probeReplySubject()
-        probeAsyncSubject()
+//        probeAsyncSubject()
+        probeObserverObsevable()
     }
 
     private fun probePublishSubject() {
@@ -92,5 +94,14 @@ class Rx05SubjectActivity : AppCompatActivity() {
             onComplete()
             subscribe(obs2)
         }
+    }
+
+    private fun probeObserverObsevable() {
+        "SUBJECT AS OBSERVER AND OBSERVABLE".showTitle()
+        val observable = Observable.just("Albert", "Martha")
+        val replaySubject = ReplaySubject.create<String>()
+        observable.subscribe(replaySubject)
+        replaySubject.subscribe(obs)
+        replaySubject.subscribe(obs2)
     }
 }
