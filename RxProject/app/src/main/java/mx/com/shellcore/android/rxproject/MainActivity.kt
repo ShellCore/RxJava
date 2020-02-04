@@ -39,5 +39,8 @@ class MainActivity : AppCompatActivity() {
         btnRx07Binding.setOnClickListener {
             startActivity(Intent(this, Rx07BindingActivity::class.java))
         }
+        btnRx08BackPressure.setOnClickListener {
+            startActivity(Intent(this, Rx08BackPressureActivity::class.java))
+        }
     }
 }
