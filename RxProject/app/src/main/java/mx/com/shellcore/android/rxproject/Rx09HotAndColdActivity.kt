@@ -16,7 +16,8 @@ class Rx09HotAndColdActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rx09_hot_and_cold)
 
-        coldObservable()
+//        coldObservable()
+        hotObservable()
     }
 
     private fun coldObservable() {
@@ -26,6 +27,20 @@ class Rx09HotAndColdActivity : AppCompatActivity() {
         })
         Thread.sleep(2000)
         compositeDisposable.add(cold.subscribe {
+            "Subscriber 2: $it".showLog()
+        })
+    }
+
+    private fun hotObservable() {
+        val hot = Observable.interval(500, TimeUnit.MILLISECONDS).publish()
+
+        hot.connect()
+
+        compositeDisposable.add(hot.subscribe {
+            "Subscriber 1: $it".showLog()
+        })
+        Thread.sleep(2000)
+        compositeDisposable.add(hot.subscribe {
             "Subscriber 2: $it".showLog()
         })
     }
