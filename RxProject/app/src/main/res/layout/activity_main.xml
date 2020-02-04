@@ -46,6 +46,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Subjects" />
+
+        <Button
+            android:id="@+id/btnRx06Bus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bus" />
     </LinearLayout>
 
 </ScrollView>
