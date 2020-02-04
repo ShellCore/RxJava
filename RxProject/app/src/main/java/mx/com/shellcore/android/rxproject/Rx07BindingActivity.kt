@@ -6,6 +6,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_rx07_binding.*
+import java.util.concurrent.TimeUnit
 
 class Rx07BindingActivity : AppCompatActivity() {
 
@@ -39,6 +40,19 @@ class Rx07BindingActivity : AppCompatActivity() {
         compositeDisposable.addAll(tilRxBinding.editText!!.textChanges()
             .subscribe {
                 "onTextChanged: $it".showLog()
+            })
+
+        compositeDisposable.add(btnRxBinding3.clicks()
+            .debounce(1, TimeUnit.SECONDS)
+            .subscribe {
+                "onClick con 1s".showLog()
+            })
+
+        compositeDisposable.add(tilExBinding2.editText!!.textChanges()
+            .debounce(1, TimeUnit.SECONDS)
+            .map { tilExBinding2.editText!!.text.toString() }
+            .subscribe {
+                "onTextChange: $it".showLog()
             })
     }
 
