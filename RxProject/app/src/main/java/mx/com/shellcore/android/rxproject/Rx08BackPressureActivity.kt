@@ -14,7 +14,8 @@ class Rx08BackPressureActivity : AppCompatActivity() {
         setContentView(R.layout.activity_rx08_back_pressure)
 
 //        generarBackPressure()
-        backPressureBuffer()
+//        backPressureBuffer()
+        backPressureDrop()
     }
 
     private fun generarBackPressure() {
@@ -34,6 +35,18 @@ class Rx08BackPressureActivity : AppCompatActivity() {
     private fun backPressureBuffer() {
         val source = Flowable.interval(1, TimeUnit.MILLISECONDS)
         val disposable = source.onBackpressureBuffer(1000)
+            .observeOn(Schedulers.computation())
+            .subscribe({
+                "Consumiendo observables $it".showLog()
+                Thread.sleep(100)
+            }, {
+                "onError: ${it.localizedMessage}".showLog()
+            })
+    }
+
+    private fun backPressureDrop() {
+        val source = Flowable.interval(1, TimeUnit.MILLISECONDS)
+        val disposable = source.onBackpressureDrop()
             .observeOn(Schedulers.computation())
             .subscribe({
                 "Consumiendo observables $it".showLog()
