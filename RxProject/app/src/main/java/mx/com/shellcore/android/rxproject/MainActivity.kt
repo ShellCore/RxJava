@@ -42,5 +42,8 @@ class MainActivity : AppCompatActivity() {
         btnRx08BackPressure.setOnClickListener {
             startActivity(Intent(this, Rx08BackPressureActivity::class.java))
         }
+        btnRx09HotAndCold.setOnClickListener {
+            startActivity(Intent(this, Rx09HotAndColdActivity::class.java))
+        }
     }
 }
