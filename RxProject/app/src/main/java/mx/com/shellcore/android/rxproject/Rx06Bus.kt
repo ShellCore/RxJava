@@ -8,10 +8,11 @@ class Rx06Bus {
     companion object {
         private var instance: Rx06Bus? = null
 
-        fun getInstance() {
+        fun getInstance(): Rx06Bus {
             if (instance == null) {
                 instance = Rx06Bus()
             }
+            return instance!!
         }
     }
 
