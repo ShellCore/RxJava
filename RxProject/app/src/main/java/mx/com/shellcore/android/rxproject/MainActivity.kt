@@ -36,5 +36,8 @@ class MainActivity : AppCompatActivity() {
         btnRx06Bus.setOnClickListener {
             startActivity(Intent(this, Rx06BusActivity::class.java))
         }
+        btnRx07Binding.setOnClickListener {
+            startActivity(Intent(this, Rx07BindingActivity::class.java))
+        }
     }
 }

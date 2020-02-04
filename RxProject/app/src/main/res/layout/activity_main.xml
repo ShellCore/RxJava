@@ -52,6 +52,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bus" />
+
+        <Button
+            android:id="@+id/btnRx07Binding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Binding" />
     </LinearLayout>
 
 </ScrollView>
