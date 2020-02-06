@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.akarnokd.rxjava2.math.MathObservable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -37,7 +38,7 @@ class RxRetrofitActivity : AppCompatActivity() {
 //        getListWithRxInverse()
 //        getListWithRxWithFilter()
 //        getListWithRxOperators()
-        getListWithRxOrderByStars()
+        getListWithRxMathOperators()
     }
 
     override fun onDestroy() {
@@ -74,16 +75,17 @@ class RxRetrofitActivity : AppCompatActivity() {
     }
 
     private fun getListWithRx() {
-        compositeDisposable.add(WebService.getInstance()
-            .createService()
-            .getReposForUserRx(USER)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                reposAdapter.setRepos(it)
-            }, {
-                Log.e("GetReposForUser", it.localizedMessage!!)
-            })
+        compositeDisposable.add(
+            WebService.getInstance()
+                .createService()
+                .getReposForUserRx(USER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    reposAdapter.setRepos(it)
+                }, {
+                    Log.e("GetReposForUser", it.localizedMessage!!)
+                })
         )
     }
 
@@ -162,5 +164,35 @@ class RxRetrofitActivity : AppCompatActivity() {
                 Log.e("GetReposForUser", it.localizedMessage!!)
             })
         )
+    }
+
+    private fun getListWithRxMathOperators() {
+        val observable = WebService.getInstance()
+            .createService()
+            .getReposForUserRx(USER)
+            .toObservable()
+            .flatMapIterable { it }
+            .map { it.stargazersCount }
+
+        compositeDisposable.add(MathObservable.averageDouble(observable)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.d("MathOperations", "Average: $it")
+            })
+
+        compositeDisposable.add(MathObservable.max(observable)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.d("MathOperations", "Max: $it")
+            })
+
+        compositeDisposable.add(MathObservable.min(observable)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.d("MathOperations", "Min: $it")
+            })
     }
 }
