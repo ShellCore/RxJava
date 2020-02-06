@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_rx_retrofit.*
 import mx.com.shellcore.android.rxretrofit.adapter.RepositoryAdapter
 import mx.com.shellcore.android.rxretrofit.api.WebService
@@ -12,7 +14,7 @@ import mx.com.shellcore.android.rxretrofit.model.GithubRepo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.ArrayList
+import java.util.*
 
 class RxRetrofitActivity : AppCompatActivity() {
 
@@ -25,17 +27,25 @@ class RxRetrofitActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rx_retrofit)
         setupView()
-        getListWidthoutRx()
+//        getListWithoutRx()
+//        getListWithRx()
+        getListWithRxInverse()
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 
     private fun setupView() {
         recRepos.apply {
-            layoutManager = LinearLayoutManager(this@RxRetrofitActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(this@RxRetrofitActivity, LinearLayoutManager.VERTICAL, false)
             adapter = reposAdapter
         }
     }
 
-    private fun getListWidthoutRx() {
+    private fun getListWithoutRx() {
         val call = WebService.getInstance()
             .createService()
             .getReposForUser("JakeWharton")
@@ -53,5 +63,39 @@ class RxRetrofitActivity : AppCompatActivity() {
                 Log.e("GetReposForUser", t.localizedMessage!!)
             }
         })
+    }
+
+    private fun getListWithRx() {
+        compositeDisposable.add(WebService.getInstance()
+            .createService()
+            .getReposForUserRx("JakeWharton")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                reposAdapter.setRepos(it)
+            }, {
+                Log.e("GetReposForUser", it.localizedMessage!!)
+            })
+        )
+    }
+
+    private fun getListWithRxInverse() {
+        compositeDisposable.add(WebService.getInstance()
+            .createService()
+            .getReposForUserRx("JakeWharton")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map {
+                Collections.sort(it) { o1, o2 ->
+                    o2.name.compareTo(o1.name)
+                }
+                it
+            }
+            .subscribe({
+                reposAdapter.setRepos(it)
+            }, {
+                Log.e("GetReposForUser", it.localizedMessage!!)
+            })
+        )
     }
 }
