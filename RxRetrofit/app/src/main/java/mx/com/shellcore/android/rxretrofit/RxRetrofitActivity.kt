@@ -19,6 +19,10 @@ import java.util.*
 
 class RxRetrofitActivity : AppCompatActivity() {
 
+    companion object {
+        private const val USER = "JakeWharton"
+    }
+
     private val compositeDisposable by lazy { CompositeDisposable() }
     private val reposAdapter: RepositoryAdapter by lazy { RepositoryAdapter(githubRepos) }
 
@@ -31,7 +35,9 @@ class RxRetrofitActivity : AppCompatActivity() {
 //        getListWithoutRx()
 //        getListWithRx()
 //        getListWithRxInverse()
-        getListWithRxWithFilter()
+//        getListWithRxWithFilter()
+//        getListWithRxOperators()
+        getListWithRxOrderByStars()
     }
 
     override fun onDestroy() {
@@ -50,7 +56,7 @@ class RxRetrofitActivity : AppCompatActivity() {
     private fun getListWithoutRx() {
         val call = WebService.getInstance()
             .createService()
-            .getReposForUser("JakeWharton")
+            .getReposForUser(USER)
 
         call.enqueue(object : Callback<List<GithubRepo>> {
             override fun onResponse(
@@ -70,7 +76,7 @@ class RxRetrofitActivity : AppCompatActivity() {
     private fun getListWithRx() {
         compositeDisposable.add(WebService.getInstance()
             .createService()
-            .getReposForUserRx("JakeWharton")
+            .getReposForUserRx(USER)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -84,7 +90,7 @@ class RxRetrofitActivity : AppCompatActivity() {
     private fun getListWithRxInverse() {
         compositeDisposable.add(WebService.getInstance()
             .createService()
-            .getReposForUserRx("JakeWharton")
+            .getReposForUserRx(USER)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map {
@@ -104,17 +110,54 @@ class RxRetrofitActivity : AppCompatActivity() {
     private fun getListWithRxWithFilter() {
         compositeDisposable.add(WebService.getInstance()
             .createService()
-            .getReposForUserRx("JakeWharton")
+            .getReposForUserRx(USER)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .toObservable()
-            .flatMap { Observable.fromIterable(it) }
-            .filter {
-                it.language == "Kotlin"
-            }
+            .flatMapIterable { it }
+            .filter { it.language == "Kotlin" }
             .subscribe({
                 (githubRepos as ArrayList).add(it)
                 reposAdapter.setRepos(githubRepos)
+            }, {
+                Log.e("GetReposForUser", it.localizedMessage!!)
+            })
+        )
+    }
+
+    private fun getListWithRxOperators() {
+        compositeDisposable.add(WebService.getInstance()
+            .createService()
+            .getReposForUserRx(USER)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .toObservable()
+            .flatMapIterable { it }
+            .filter { it.language == "Java" }
+//            .take(3)
+//            .elementAt(3)
+//            .first(GithubRepo())
+            .skip(3)
+            .subscribe({
+                (githubRepos as ArrayList).add(it)
+                reposAdapter.setRepos(githubRepos)
+            }, {
+                Log.e("GetReposForUser", it.localizedMessage!!)
+            })
+        )
+    }
+
+    private fun getListWithRxOrderByStars() {
+        compositeDisposable.add(WebService.getInstance()
+            .createService()
+            .getReposForUserRx(USER)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .toObservable()
+            .flatMapIterable { it }
+            .toSortedList { o1, o2 -> o2.stargazersCount - o1.stargazersCount }
+            .subscribe({
+                reposAdapter.setRepos(it)
             }, {
                 Log.e("GetReposForUser", it.localizedMessage!!)
             })

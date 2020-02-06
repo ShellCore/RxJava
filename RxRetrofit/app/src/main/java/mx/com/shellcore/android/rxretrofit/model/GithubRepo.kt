@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class GithubRepo(
     @SerializedName("language")
-    val language: String,
+    var language: String = "No languaje",
     @SerializedName("name")
-    val name: String,
+    var name: String = "No name",
     @SerializedName("stargazers_count")
-    val stargazersCount: Int
+    var stargazersCount: Int = 0
 )
