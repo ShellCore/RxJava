@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -29,7 +30,8 @@ class RxRetrofitActivity : AppCompatActivity() {
         setupView()
 //        getListWithoutRx()
 //        getListWithRx()
-        getListWithRxInverse()
+//        getListWithRxInverse()
+        getListWithRxWithFilter()
     }
 
     override fun onDestroy() {
@@ -93,6 +95,26 @@ class RxRetrofitActivity : AppCompatActivity() {
             }
             .subscribe({
                 reposAdapter.setRepos(it)
+            }, {
+                Log.e("GetReposForUser", it.localizedMessage!!)
+            })
+        )
+    }
+
+    private fun getListWithRxWithFilter() {
+        compositeDisposable.add(WebService.getInstance()
+            .createService()
+            .getReposForUserRx("JakeWharton")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .toObservable()
+            .flatMap { Observable.fromIterable(it) }
+            .filter {
+                it.language == "Kotlin"
+            }
+            .subscribe({
+                (githubRepos as ArrayList).add(it)
+                reposAdapter.setRepos(githubRepos)
             }, {
                 Log.e("GetReposForUser", it.localizedMessage!!)
             })
