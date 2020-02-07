@@ -14,5 +14,9 @@ class MainActivity : AppCompatActivity() {
         btnRxRetrofit.setOnClickListener {
             startActivity(Intent(this, RxRetrofitActivity::class.java))
         }
+
+        btnRxRetrofitNested.setOnClickListener {
+            startActivity(Intent(this, RxRetrofitAnidadoActivity::class.java))
+        }
     }
 }
