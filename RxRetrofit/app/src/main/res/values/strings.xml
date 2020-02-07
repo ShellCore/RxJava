@@ -4,4 +4,6 @@
     <string name="item_repo_lbl_repoName">Nombre del repositorio:</string>
     <string name="item_repo_lbl_repoLanguage">Lenguaje:</string>
     <string name="item_repo_img_star_description">Star icon</string>
+    <string name="item_repo_lbl_contributorName">Nombre:</string>
+    <string name="item_repo_lbl_contributorContributions">Contribuciones:</string>
 </resources>
