@@ -35,7 +35,8 @@ class RxRetrofitAnidadoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rx_retrofit_anidado)
         setupView()
-        peticionesAnidadasServidorRx()
+//        peticionesAnidadasServidorRx()
+        peticionesAnidadasServidorRxConMejoras()
     }
 
     override fun onDestroy() {
@@ -61,7 +62,7 @@ class RxRetrofitAnidadoActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .toObservable()
-            .flatMap { Observable.fromIterable(it) }
+            .flatMapIterable { it }
             .flatMap {
                 WebService.getInstance()
                     .createService()
@@ -69,6 +70,35 @@ class RxRetrofitAnidadoActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.io())
             }
             .flatMapIterable { it }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    (contributors as ArrayList).add(it)
+                    contributorsAdapter.setContributors(contributors)
+                },
+                { Log.e("NestedQuery", it.localizedMessage!!) }
+            )
+        )
+    }
+
+    private fun peticionesAnidadasServidorRxConMejoras() {
+        compositeDisposable.add(WebService.getInstance()
+            .createService()
+            .getReposForUserRx(USER)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .toObservable()
+            .flatMapIterable { it }
+            .flatMap {
+                WebService.getInstance()
+                    .createService()
+                    .getRepoContributorsForUserAndRepoRx(USER, it.name)
+                    .subscribeOn(Schedulers.io())
+            }
+            .flatMapIterable { it }
+            .sorted { a, b -> b.contributions - a.contributions }
+            .filter { it.contributions > 300 }
+            .distinct { it.login }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
