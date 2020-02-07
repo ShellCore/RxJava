@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnRx00Intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Introducción" />
+
+        <Button
+            android:id="@+id/btnRx01Disposable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disposable" />
+
+        <Button
+            android:id="@+id/btnRx02Composite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Composite Disposable" />
+
+        <Button
+            android:id="@+id/btnRx03Operadores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Operadores" />
+
+        <Button
+            android:id="@+id/btnRx04TiposOperadores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tipos de Obsevables" />
+
+        <Button
+            android:id="@+id/btnRx05Subjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subjects" />
+
+        <Button
+            android:id="@+id/btnRx06Bus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bus" />
+
+        <Button
+            android:id="@+id/btnRx07Binding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Binding" />
+
+        <Button
+            android:id="@+id/btnRx08BackPressure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back Pressure" />
+
+        <Button
+            android:id="@+id/btnRx09HotAndCold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hot and Cold Observables" />
+    </LinearLayout>
+
+</ScrollView>

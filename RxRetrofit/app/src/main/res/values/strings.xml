@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RxRetrofit</string>
+    <string name="main_btn_rxRetrofit">Rx Retrofit</string>
+    <string name="item_repo_lbl_repoName">Nombre del repositorio:</string>
+    <string name="item_repo_lbl_repoLanguage">Lenguaje:</string>
+    <string name="item_repo_img_star_description">Star icon</string>
+    <string name="item_repo_lbl_contributorName">Nombre:</string>
+    <string name="item_repo_lbl_contributorContributions">Contribuciones:</string>
+    <string name="main_btn_rxRetrofitNested">Rx Retrofit Anidado</string>
+</resources>
